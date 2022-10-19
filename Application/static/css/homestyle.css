@@ -99,6 +99,7 @@ span{
 #login input{
 	color:white;
 	font-size:1.1em;
+	text-align: center;
 }
 #register{
 	left:450px;
@@ -106,4 +107,5 @@ span{
 #register input{
 	color:white;
 	font-size: 1.1em;
+	text-align: center;
 }

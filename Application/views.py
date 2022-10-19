@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 
+from django.core.paginator import Paginator
 # models
 from .models import *
 
@@ -54,25 +55,28 @@ def signout(request):
     logout(request)
     messages.success(request,'You are successfully logout')
     return redirect('signin')
-    return redirect('signin')
 
 @login_required
 def home(request):
     topics=Topic.objects.all()
-    questions=McqQuestion.objects.all()
+    p=Paginator(McqQuestion.objects.all().order_by('-id'),15)
+    page=request.GET.get('page')
+    ques=p.get_page(page)
     context={
         'topics':topics,
-        'questions':questions
+        'questions':ques
     }
     return render(request,'homepage.html',context)
 
 @login_required
 def selected_topic(request,topic_id):
-    questions=McqQuestion.objects.filter(topic_id=topic_id)
+    p=Paginator(McqQuestion.objects.filter(topic_id=topic_id).order_by('-id'),15)
+    page=request.GET.get('page')
+    ques=p.get_page(page)
     topics=Topic.objects.all()
     context={
         'topics':topics,
-        'questions':questions,
+        'questions':ques
     }
     return render(request,'topicMcq.html',context)
 
@@ -150,11 +154,13 @@ def search(request):
     if request.method=='POST':
         searched_data=request.POST.get('searched_data')
     mcq_topics=Topic.objects.filter(topic__contains=searched_data).order_by('id')
-    mcq_questions=McqQuestion.objects.filter(question__contains=searched_data).order_by('id')
+    p=Paginator(McqQuestion.objects.filter(question__contains=searched_data).order_by('-id'),15)
+    page=request.GET.get('page')
+    ques=p.get_page(page)
     context={
         'keyword':searched_data,
         'mcq_topics':mcq_topics,
-        'mcq_questions':mcq_questions,
+        'questions':ques,
     }
     return render(request,'search.html',context)
 
