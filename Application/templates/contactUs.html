@@ -1,0 +1,26 @@
+{% extends 'base2.html' %}
+{% block title %}Contact Admin{% endblock title %}
+{% block body %}
+<div class="container mt-5">
+    <h2 class="text-center">Contact Us</h2>
+    <div>
+        <form action="{% url 'ContactUs' %}" method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Email address</label>
+                <input name="email" type="email" class="form-control" id="exampleFormControlInput1" value='{{user.email}}' readonly>
+            </div>
+            <div class="mb-3">
+                <label for="formGroupExampleInput" class="form-label">Username</label>
+                <input name="username" type="text" class="form-control" id="formGroupExampleInput" value="{{user.username}}" readonly>
+            </div>
+
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Message</label>
+                <textarea name="message" class="form-control" id="exampleFormControlTextarea1" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Send</button>
+        </form>
+    </div>
+</div>
+{% endblock body %}

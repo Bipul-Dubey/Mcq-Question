@@ -1,0 +1,66 @@
+{% extends 'base2.html' %}
+{% block title %}Home{% endblock title %} 
+{% block style %}
+  a.topic_wise{
+    text-decoration:none;
+  }
+  .Correct-Answer{
+    display: none;
+  }
+  .btn-small{
+    --bs-btn-padding-y: .25rem;
+    --bs-btn-padding-x: .5rem;
+    --bs-btn-font-size: .75rem;
+  }
+  ul label{
+    font-size: 115%;
+  }
+{% endblock style %}
+{% block body %}
+<div class="container-fluid mt-2">
+  <div class="row g-3">
+    <div class="col-sm-8">
+      <h2>MCQ-Questions</h2>
+      {% for question in questions %}
+      <div class="px-3">
+        <hr>
+        <ul>
+          <label for="">{{question}}</label>
+          {% for option in question.question_option.all %}
+          <li>{{option}}</li>
+          {% endfor %}
+        </ul>
+        <button id="ansbtn{{question.id}}" onclick="myFunction(this.id)" class="btn btn-info btn-small px-3">Correct Answer</button>
+        <div id="ansdiv{{question.id}}" class="Correct-Answer">
+          <label>
+            Correct Answer: {% for option in question.question_option.all %}
+            {% if option.is_correct %}<strong>{{option}}</strong>{% endif %}
+            {% endfor %}
+          </label>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="col">
+      <h2>Topic Wise</h2>
+      <ul>
+        {% for topic in topics %}
+        <li><a class="topic_wise" href="{% url 'topicmcq' topic.id %}">{{topic}}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  function myFunction(clicked){
+    y=clicked.slice(6,);
+    var x=document.getElementById("ansdiv"+y);
+    if (x.style.display === "block") {
+      x.style.display = "none";
+    } else {
+      x.style.display = "block";
+    }
+  }
+</script>
+{% endblock body %}

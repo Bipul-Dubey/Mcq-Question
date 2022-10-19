@@ -1,0 +1,127 @@
+{% extends 'base2.html' %}
+{% block title %}Add Question{% endblock title %}
+{% block style %}
+a.topic_wise{
+text-decoration:none;
+}
+.Correct-Answer{
+display: none;
+}
+.btn-small{
+--bs-btn-padding-y: .25rem;
+--bs-btn-padding-x: .5rem;
+--bs-btn-font-size: .75rem;
+}
+ul label{
+font-size: 115%;
+}
+.topic-add-div{
+display: none;
+}
+#addnewmcq{
+display: none;
+}
+{% endblock style %}
+{% block body %}
+  {% for message in messages %}<h4 style="color:red">{{message}}</h4>{% endfor %}
+    <div class="container-fluid mt-3">
+      <div class="row m-2">
+        <h4>MCQ Questions</h4>
+        <div class="col">
+          <div class="topic-div">
+            <select class="form-select" name="topic-name" onchange="showMe(this.value);">
+              <option class="opt" name="q-type" value="Random">-- Select Topic --</option>
+              {% for mcqtopic in  mcq_topics %}
+              <option class="opt" name="q-type" value = "{{mcqtopic}}">{{mcqtopic}}</option>
+              {% endfor %}
+              <option class="opt" name="q-type" value = "None">None</option>
+            </select>
+            <form method="post" action="{% url 'add_mcq_topic' %}">
+              {% csrf_token %}
+              <div id="x" class="mt-3 topic-add-div">
+                <input type="text" class="form-control"  name="topic" placeholder="Topic">
+                <button class="btn btn-primary btn-sm m-2" type="submit" name="button">ADD Topic</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="col-9">
+          <select class="form-select" name="selected-question" onchange="showMeQuestion(this.value);">
+            <option class="opt" name="q-type" value= "">Select Question</option>
+            {% for mcq_que in mcq_questions %}
+            <option class="opt" name="q-type" value="{{mcq_que}}">{{mcq_que}}</option>
+            {% endfor %}
+            <option class="opt" name="q-type" value= "NewQue">Add New</option>
+          </select>
+          <div id="addnewmcq" class="mt-3 addnewmcqQ">
+            <form method="post" action="{% url 'add_mcq_question' %}">
+              {% csrf_token %}
+              <input class="form-control mb-2 readonly" id="input_mcq_topic" type="text" name="topic" placeholder="Select MCQ Topic" required>
+              <div class="input-group">
+                <span class="input-group-text">MCQ Question</span>
+                <textarea name="mcqquestion" class="form-control " aria-label="MCQ Question" required></textarea>
+              </div>
+              <button class="btn btn-primary btn-sm m-2" type="submit" name="button">ADD Question</button>
+            </form>
+          </div>          
+
+
+          <form class="mt-5" action="{% url 'add_mcq_option' %}" method="post">
+            {% csrf_token %}
+            <input id="inputopt_mcq_ques" type="text" class="form-control mb-2 readonly" name="question" placeholder="Select MCQ Question" autocomplete="off" required>
+            <div class="input-group">
+              <span class="input-group-text">MCQ Option</span>
+              <textarea name="mcqqueOption" class="form-control " aria-label="MCQ Option" required></textarea>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="True" name="iscrrt" id="flexCheckDefault">
+              <label class="form-check-label" for="flexCheckDefault">
+                Is Correction Option
+              </label>
+            </div>
+            <button onclick="optionbtn()" class="btn btn-primary btn-sm m-2" type="submit" name="button">Add Option</button>
+          </form>
+
+        </div>
+
+      </div>
+<script>
+// this is for mcq question from
+  document.getElementById('input_mcq_topic').value="";
+// this is for mcq option option form
+  document.getElementById('inputopt_mcq_ques').value="";
+// this is for mcq correct option
+  document.getElementById('inputCropt_mcq_ques').value="";
+// this is for showing topic and if topic is none then add option
+  function showMe(val){
+    if(val=='None'){
+      document.getElementById('x').style.display="block";
+    }
+    else{
+      document.getElementById('x').style.display="none";
+      document.getElementById('input_mcq_topic').value=val;
+    }
+  }
+ // this is for if mcq question not present in list
+  function showMeQuestion(val){
+    if(val=='NewQue'){
+      document.getElementById('addnewmcq').style.display="block";      
+      document.getElementById('inputopt_mcq_ques').value="";      
+      document.getElementById('inputCropt_mcq_ques').value="";
+    }
+    else{
+      document.getElementById('addnewmcq').style.display="none";
+      document.getElementById('inputopt_mcq_ques').value=val;      
+      document.getElementById('inputCropt_mcq_ques').value=val;
+    }
+  }
+//  refresh option box
+  function optionbtn(){
+    document.getElementById('IDoptns').value="";
+  }
+  $(".readonly").keydown(function(e){
+    e.preventDefault();
+  });
+</script>
+{% endblock body %}

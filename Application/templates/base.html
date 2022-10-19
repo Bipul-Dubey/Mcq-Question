@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <link rel="shortcut icon" href="#">
+    {% load static %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MCQ Questions</title>
+    <style>{% block style %} {% endblock style %}</style>
+    <link rel="stylesheet" href="../static/css/homestyle.css">
+  </head>
+  <body>
+    {% for message in messages %}
+    <div class="alert alert-info text-center" role="alert">
+      <h4>{{message}}<h4>
+    </div>
+    {% endfor %}
+    {% block body %}{% endblock body %}
+    <script>{% block script %}{% endblock script %}</script>
+  </body>
+</html>
