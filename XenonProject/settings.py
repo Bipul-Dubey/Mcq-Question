@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-dscj46nqm4((^pp5!ha^wf3_fpc0!kj#+en7g1*9l9wsva8148
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['XenonProject.herokuapp.com']
 
 
 # Application definition
@@ -76,10 +77,12 @@ WSGI_APPLICATION = 'XenonProject.wsgi.application'
 
 DATABASES = {
 'default': {
-    'ENGINE': 'django.db.backends.mysql',
-    'NAME': 'XenonTask',
-    'USER': 'root',
-    'PASSWORD': 'root',
+    'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    'NAME': 'da1f38smbir0vg',
+    'USER': 'vxeghcccjotwjp',
+    'PASSWORD': '646b3c8236722ffe1d0545b63e2dea7a589557f58f2850c8f749404c1d221ee6',
+    'HOST':'ec2-54-173-237-110.compute-1.amazonaws.com',
+    'PORT':'5432'
   }
 }
 
@@ -117,9 +120,15 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
-STATIC_URL = 'static/'
+# STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# added manually
+import os
+import django_heroku
+STATIC_ROOT=os.path.join(BASE_DIR,'staticfiles')
+STATIC_URL = '/static/'
+django_heroku.settings(locals())
