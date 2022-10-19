@@ -74,14 +74,10 @@ WSGI_APPLICATION = 'XenonProject.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-'default': {
-    'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    'NAME': 'da1f38smbir0vg',
-    'USER': 'vxeghcccjotwjp',
-    'PASSWORD': '646b3c8236722ffe1d0545b63e2dea7a589557f58f2850c8f749404c1d221ee6',
-    'HOST':'ec2-54-173-237-110.compute-1.amazonaws.com',
-    'PORT':'5432'
-  }
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
 
 
