@@ -74,7 +74,7 @@ def selected_topic(request,topic_id):
         'topics':topics,
         'questions':questions,
     }
-    return render(request,'topicmcq.html',context)
+    return render(request,'topicMcq.html',context)
 
 # add mcq question
 @login_required
