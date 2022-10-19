@@ -79,11 +79,13 @@ def selected_topic(request,topic_id):
 # add mcq question
 @login_required
 def add_mcq_topic(request):
+    superusers=User.objects.filter(is_superuser=True)
     current_user=request.user
+    isnot_superuser=current_user not in superusers
     if request.method=='POST':
         topic=request.POST.get('topic')
         user_Alltopic=current_user.user_mcq_topic.all()
-        if len(user_Alltopic)>2:
+        if len(user_Alltopic)>2 and isnot_superuser:
             messages.error(request,'Cannot Add More, Already Added 3')
             return redirect('home')
         if Topic.objects.filter(topic=topic):
@@ -102,12 +104,14 @@ def add_mcq_question(request):
         'mcq_topics':mcq_topics,
         'mcq_questions':mcq_questions
     }
+    superusers=User.objects.filter(is_superuser=True)
     curr_user=request.user
+    isnot_superuser=curr_user not in superusers
     if request.method=='POST':
         topic=request.POST.get('topic')
         question=request.POST.get('mcqquestion')
         user_Allmcq=curr_user.user_question.all()
-        if len(user_Allmcq)>4:
+        if len(user_Allmcq)>4 and isnot_superuser:
             messages.error(request,'Cannot Add More Question, Already Added 5')
             return redirect('home')
         if McqQuestion.objects.filter(question=question):
