@@ -21,10 +21,10 @@ def signup(request):
         if password1!=password2:
             messages.error(request,'Password Not Matched')
             return redirect('register')
-        if User.objects.filter(username=username):
+        if User.objects.filter(username=username.lower()):
             messages.warning(request,"Username Already exists!!")
             return render('register')
-        if User.objects.filter(email=email):
+        if User.objects.filter(email=email.lower()):
             messages.warning(request,'Email already registred')
             return render('register')
         if len(password1)<6:
@@ -41,7 +41,7 @@ def signin(request):
     if request.method=='POST':
         username=request.POST['username']
         pass1=request.POST['password']
-        user=authenticate(request,username=username,password=pass1)
+        user=authenticate(request,username=username.lower(),password=pass1)
         if user is not None:
             login(request,user)
             return redirect('home')
@@ -154,7 +154,10 @@ def search(request):
     if request.method=='POST':
         searched_data=request.POST.get('searched_data')
     mcq_topics=Topic.objects.filter(topic__contains=searched_data).order_by('id')
-    p=Paginator(McqQuestion.objects.filter(question__contains=searched_data).order_by('-id'),15)
+    try:
+        p=Paginator(McqQuestion.objects.filter(question__contains=searched_data).order_by('-id'),15)
+    except:
+        p=Paginator(McqQuestion.objects.filter(question__contains=searched_data.capitalize()).order_by('-id'),15)
     page=request.GET.get('page')
     ques=p.get_page(page)
     context={
