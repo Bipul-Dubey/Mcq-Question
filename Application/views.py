@@ -23,13 +23,13 @@ def signup(request):
             return redirect('register')
         if User.objects.filter(username=username.lower()):
             messages.warning(request,"Username Already exists!!")
-            return render('register')
+            return redirect('register')
         if User.objects.filter(email=email.lower()):
             messages.warning(request,'Email already registred')
-            return render('register')
+            return redirect('register')
         if len(password1)<6:
             messages.warning(request,'Password length not Less than 6')
-            return render('register')
+            return redirect('register')
         else:
             newuser=User.objects.create_user(username=username,email=email,password=password1,first_name=f_name,last_name=l_name)
             newuser.save()
@@ -154,10 +154,7 @@ def search(request):
     if request.method=='POST':
         searched_data=request.POST.get('searched_data')
     mcq_topics=Topic.objects.filter(topic__contains=searched_data).order_by('id')
-    try:
-        p=Paginator(McqQuestion.objects.filter(question__contains=searched_data).order_by('-id'),15)
-    except:
-        p=Paginator(McqQuestion.objects.filter(question__contains=searched_data.capitalize()).order_by('-id'),15)
+    p=Paginator(McqQuestion.objects.filter(question__contains=searched_data).order_by('-id'),15)
     page=request.GET.get('page')
     ques=p.get_page(page)
     context={
